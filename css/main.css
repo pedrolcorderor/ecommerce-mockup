@@ -96,10 +96,12 @@ main{
     padding:.5rem;
     text-transform:uppercase;
     border-radius: 2rem;
+    border-bottom: 1rem;
     cursor:pointer;
     border:2px solid var(--clr-white)
 }
 .producto-agregar:hover{
     background-color:var(--clr-main);
     color:var(--clr-white);
+    transition: background-color .2s ,color .2s;
 }
