@@ -21,7 +21,9 @@ h1,h2,h3,h4,h5,h6,p,a,input,textarea,ul {
     padding:0;
 }
 
-
+ul {
+    list-style-type: none;
+}
 
 a {
     text-decoration: none;
@@ -47,6 +49,29 @@ aside{
     font-weight:400;
     font-size:1.3rem;
 }
+
+/* aside */
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap: 2rem;
+}
+.boton-menu{
+    background-color: transparent;
+    border:0;
+    color:var(--clr-white);
+    font-size:1rem;
+    cursor:pointer;
+    display: flex;
+    font-weight: 600;
+    gap: 1rem;
+}
+
+.bi-hand-index-thumb-fill,
+.bi-hand-index-thumb {
+    transform: rotateZ(90deg);
+}
+
 .texto-footer{
     color:var(--clr-main-light);
     font-size:.85rem;
