@@ -186,8 +186,14 @@ const productos = [
 ];
 
 const contenedorProductos = document.querySelector("#contenedor-Productos");
-function cargarProductos() {
-  productos.forEach(producto => {
+const botonesCategorias=document.querySelectorAll(".boton-categoria")
+
+
+function cargarProductos(productoselegidos) {
+
+  contenedorProductos.innerHTML = "";
+
+  productoselegidos.forEach(producto => {
     const div = document.createElement("div");
     div.classList.add("producto");
     div.innerHTML = `
@@ -203,14 +209,29 @@ function cargarProductos() {
   /*  por cada uno de los elemento creara un div , le agregamos la clase del css y implementamos el contenido que tendra el producto. luego a cada divv
  sera agregado al contendor y luego ejecutamos la fucion */
 };
-cargarProductos();
+cargarProductos(productos);
 
-/* 
-                <div class="producto">
-                    <img class="producto-imagen" src="./img/cascos/01.jpg" alt="">
-                    <div class="producto-detalles">
-                        <h3 class="producto-titulo">casco 01</h3>
-                        <p class="producto-precio">$200</p>
-                        <button class="producto-agregar">Agregar</button>
-                    </div>
-   </div> */
+
+botonesCategorias.forEach(boton => {
+  boton.addEventListener("click", (e) => {
+
+    botonesCategorias.forEach(boton => boton.classList.remove("active"));
+    
+    e.currentTarget.classList.add("active");
+      /*e.target.classList.add("active");*/
+
+    if (e.currentTarget.id != "todos") {
+      const productosBoton = productos.filter(
+        (producto) => producto.categoria.id === e.currentTarget.id
+      ); /*nos trae el id del elemento html (e.currentTarget.id) */
+      cargarProductos(productosBoton);
+    } else (
+      cargarProductos(productos)
+    )
+    
+      })
+})
+    
+  /*  currentarget hace objetivo  al elemento al que le estamos dando el eventListener (directamente al boton) ya que con solo target le 
+  al pulsar el icono le estaremos asignando la clase que es lo que no queremos  .
+   Identifica el target (objetivo) actual del evento, ya que el evento atraviesa el DOM. Siempre hace referencia al elmento al cual el controlador del evento fue asociado, a diferencia de event. target , que identifica el elemento el el que se produjo el evento */
