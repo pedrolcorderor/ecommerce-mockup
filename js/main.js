@@ -184,10 +184,14 @@ const productos = [
     precio: 1000,
   },
 ];
+/* 1)un array con objetos que simula cada uno de los productos
+2)cada producto tiene su id y categoria
+3) cada categoria tiene su id que esta incluido en el producto, es como la llave foranea de una tabla sql pero en js */
 
 const contenedorProductos = document.querySelector("#contenedor-Productos");
-const botonesCategorias=document.querySelectorAll(".boton-categoria")
-
+const botonesCategorias = document.querySelectorAll(".boton-categoria");
+const tituloPrincipal = document.querySelector("#titulo-principal");
+let botonesAgregar = document.querySelectorAll(".producto-agregar");
 
 function cargarProductos(productoselegidos) {
 
@@ -205,9 +209,21 @@ function cargarProductos(productoselegidos) {
                     </div>
     `;
     contenedorProductos.append(div);
+    
   });
-  /*  por cada uno de los elemento creara un div , le agregamos la clase del css y implementamos el contenido que tendra el producto. luego a cada divv
- sera agregado al contendor y luego ejecutamos la fucion */
+
+
+  /*  1) Se crea una funcion(cargarProductos), recibira un array con objetos(productos) y trabajara con este. 
+  2) creamos una funcion (productoselegidos) que tendra un forEach con el que manejara cada elemento del array 
+  3)por cada elemeto ira externamente creando un div ; y luego le asignara una clase css.
+  4) a este div le insertaremos codido html para ir creando el modelo del producto e ira
+  interpolando la informacion del objeto(con cada uno "forEach")
+  5) por ultimo al objeto ya creado se lo asignamos al div contenedor y lo visualizara en 
+  la pagina
+  6)para cada carga le borraremos los elementos porque se iran acumulando 
+  */
+  
+  actualizarBotonesAgregar();
 };
 cargarProductos(productos);
 
@@ -215,19 +231,26 @@ cargarProductos(productos);
 botonesCategorias.forEach(boton => {
   boton.addEventListener("click", (e) => {
 
-    botonesCategorias.forEach(boton => boton.classList.remove("active"));
-    
+    botonesCategorias.forEach(boton => boton.classList.remove("active")); 
     e.currentTarget.classList.add("active");
       /*e.target.classList.add("active");*/
+    /* 1)es para que ningun boton tenga la clase
+    2)luego hacemos referencia al elemento seleccionado(currentTarget) y le agregamos la clase */
 
-    if (e.currentTarget.id != "todos") {
-      const productosBoton = productos.filter(
-        (producto) => producto.categoria.id === e.currentTarget.id
-      ); /*nos trae el id del elemento html (e.currentTarget.id) */
+      /* dependiendo del boton que pulsemos se filtrara el array y cambiara el titulo o 
+    estara como lo dejamos en este caso usamos un condicional if else */
+    if (e.currentTarget.id != "todos")/*  hacemos referencia al elementoque estamos pulsando y si no tiene ese id se ejecutara este condicional */
+    {
+      const productoCategoria = productos.find(producto => producto.categoria.id === e.currentTarget.id);
+            tituloPrincipal.innerText = productoCategoria.categoria.nombre;
+            const productosBoton = productos.filter(producto => producto.categoria.id === e.currentTarget.id);
+      cargarProductos(productosBoton); /* le enviamos la variable con los array ya filtrado */
+      
       cargarProductos(productosBoton);
-    } else (
-      cargarProductos(productos)
-    )
+    } else {
+        tituloPrincipal.innerText = "Todos los productos";
+        cargarProductos(productos);
+    }
     
       })
 })
@@ -235,3 +258,36 @@ botonesCategorias.forEach(boton => {
   /*  currentarget hace objetivo  al elemento al que le estamos dando el eventListener (directamente al boton) ya que con solo target le 
   al pulsar el icono le estaremos asignando la clase que es lo que no queremos  .
    Identifica el target (objetivo) actual del evento, ya que el evento atraviesa el DOM. Siempre hace referencia al elmento al cual el controlador del evento fue asociado, a diferencia de event. target , que identifica el elemento el el que se produjo el evento */
+    
+function actualizarBotonesAgregar() {
+  botonesAgregar = document.querySelectorAll(".producto-agregar");
+      /* estamos seleccionando los botones en el html y se creara unescape
+  y lo que pasara es que se creara una lista con cada elemento que tenga 
+  esa clase(".producto-agregar") y esta funcion se ejecutara cada ves que 
+  pulsemos el boton o de forma predeterminada ya que se estara imprimiendo
+  los objeto junto con los botones; */
+  
+  botonesAgregar.forEach(boton => {
+    boton.addEventListener("click", agregarAlCarrito);
+  });
+}
+
+const productosEnCarrito = [];
+
+function agregarAlCarrito(e) {
+  
+  const idBoton = e.currentTarget.id;
+  const productoAgregado = productos.find(producto => producto.id === idBoton);
+  
+  
+  if (productosEnCarrito.some(producto => producto.id === idBoton)) {
+        const index = productosEnCarrito.findIndex(producto=>producto.id === idBoton);
+    productosEnCarrito[index].cantidad++;
+  } else {
+    productoAgregado.cantidad = 1;
+    productosEnCarrito.push(productoAgregado);
+  }
+  console.log(productosEnCarrito)
+}
+    
+
