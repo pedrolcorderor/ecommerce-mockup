@@ -192,6 +192,7 @@ const contenedorProductos = document.querySelector("#contenedor-Productos");
 const botonesCategorias = document.querySelectorAll(".boton-categoria");
 const tituloPrincipal = document.querySelector("#titulo-principal");
 let botonesAgregar = document.querySelectorAll(".producto-agregar");
+const numerito = document.querySelector("#numerito");
 
 function cargarProductos(productoselegidos) {
 
@@ -270,24 +271,59 @@ function actualizarBotonesAgregar() {
   botonesAgregar.forEach(boton => {
     boton.addEventListener("click", agregarAlCarrito);
   });
+  /*1)ya teniendo la lista de los botones de cada producto para agregar al producto 
+  2)queremos que cada boton tenga un evento click para ejecutar una funcion que guardara el producto en un array junto
+  a la cantidad de productos que nosotros hemos pulsado;
+    */
 }
 
-const productosEnCarrito = [];
+/* queremos que se guarda en un array los elementos y que tambien se guarde la cantidad de elemento que haya  */
+let productosEnCarrito;
+
+let productosEnCarritoLS = localStorage.getItem("productos-en-carrito");
+
+if (productosEnCarritoLS) {
+  productosEnCarrito = JSON.parse(productosEnCarritoLS);
+  actualizarNumerito();
+} else {
+  productosEnCarrito = [];
+}
 
 function agregarAlCarrito(e) {
   
   const idBoton = e.currentTarget.id;
-  const productoAgregado = productos.find(producto => producto.id === idBoton);
+  const productoAgregado = productos.find(producto => producto.id === idBoton); /*selecciona la propiedad "id" del elemento que tenga el id del boton que pulsamos */
   
   
   if (productosEnCarrito.some(producto => producto.id === idBoton)) {
-        const index = productosEnCarrito.findIndex(producto=>producto.id === idBoton);
+    const index = productosEnCarrito.findIndex(
+      (producto) => producto.id === idBoton
+    );
     productosEnCarrito[index].cantidad++;
+    /** si existe ya el elemento 
+    1)obtemos el indice del elemento ".findIndex" 
+    2)  luego le agregamos a ese elemento 1; 
+    El método findIndex() devuelve el índice del primer elemento de un array que cumpla con la función de prueba proporcionada.
+     */
   } else {
     productoAgregado.cantidad = 1;
     productosEnCarrito.push(productoAgregado);
   }
   console.log(productosEnCarrito)
+  actualizarNumerito();
+
+  localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+};
+
+function actualizarNumerito() {
+  let nuevoNumerito = productosEnCarrito.reduce(
+    (acc, producto) => acc + producto.cantidad,
+    0
+  );
+  numerito.innerText = nuevoNumerito;
+  console.log(numerito);
+  /*suma las cantidades de los productos que hay en el array 
+  El método reduce() ejecuta una función reductora sobre cada elemento de un array, devolviendo como resultado un único valor. */
 }
     
 

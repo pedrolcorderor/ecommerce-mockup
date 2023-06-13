@@ -261,6 +261,6 @@ cursor:pointer;
     border-top-right-radius: 1rem;
         border-bottom-right-radius: 1rem;
 }
-.disable{
+.disabled{
     display: none;
 }
