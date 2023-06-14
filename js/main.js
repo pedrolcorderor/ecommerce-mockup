@@ -278,6 +278,8 @@ function actualizarBotonesAgregar() {
 }
 
 /* queremos que se guarda en un array los elementos y que tambien se guarde la cantidad de elemento que haya  */
+
+
 let productosEnCarrito;
 
 let productosEnCarritoLS = localStorage.getItem("productos-en-carrito");
@@ -288,6 +290,7 @@ if (productosEnCarritoLS) {
 } else {
   productosEnCarrito = [];
 }
+// es para que no c borre los objetos que tenemos en el carrito
 
 function agregarAlCarrito(e) {
   
